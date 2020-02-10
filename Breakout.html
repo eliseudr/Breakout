@@ -1,0 +1,74 @@
+<html>
+
+    <canvas id="breakout" width="900" height="450"></canvas>
+
+    <script>
+
+        var canvas;
+        var canvasContext;
+
+        //Barra Controlavel
+        const LarguraBarra = 180;
+        const AlturaBarra = 10;
+
+        //Barras inimigas
+        var BarrinhaAltura = 15;
+        var BarrinhaLargura =  40;
+
+        //Quantidade de pixels que sera movidos
+        var velocidade = 5;
+
+        //Para carregar o conteudo apenas apos carregar toda a pagina
+         window.onload = function(){
+            
+            canvas = document.getElementById("breakout");
+            canvasContext = canvas.getContext("2d");
+
+            setInterval(function (){
+                        Visual();
+                        Movimento();
+                        }, 30);
+            
+        }
+
+        function Movimento(){
+
+
+
+        }
+
+        function Visual(){
+            
+            canvasContext.fillStyle = "black";
+            canvasContext.fillRect(0, 0, canvas.width, canvas.height);
+
+            //Cria a barra jogavel
+            canvasContext.fillStyle = "white";
+            canvasContext.fillRect(canvas.width/2-LarguraBarra/2, canvas.height-AlturaBarra*2, LarguraBarra, AlturaBarra);
+
+            //Criação da bola
+            canvasContext.fillStyle = "red";
+            canvasContext.beginPath();
+            canvasContext.arc(canvas.width/2, canvas.height-100, 7, 0, 2 * Math.PI, true);
+            canvasContext.fill();//Preenche a bola
+            
+            BarrasInimigas();
+
+        }
+
+        function BarrasInimigas(){
+
+            for(var x = 5; x < canvas.width ; x += 50){
+                for( var y = 10 ; y < 250 ; y += 20){
+                canvasContext.fillStyle = "pink";
+                canvasContext.fillRect(x, y, BarrinhaLargura, BarrinhaAltura); 
+                }
+            }
+        } 
+        
+       
+
+    </script>
+
+
+</html>
