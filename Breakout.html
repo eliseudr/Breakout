@@ -16,9 +16,18 @@
         var BarrinhaLargura =  40;
 
         //Quantidade de pixels que sera movidos
-        var velocidade = 5;
+        var velocidadeX = 7;
+        var velocidadeY = 7;
 
-        //Para carregar o conteudo apenas apos carregar toda a pagina
+        //Posições iniciais da bola
+        var BolaX = 450;
+        var BolaY = 350;
+
+        //Posições Iniciais da Barra Jogavel
+        var PosicaoX = 360;
+        var PosicaoY = 430;
+
+        //Para carregar o conteudo apenas apos carregar toda a pagina.
          window.onload = function(){
             
             canvas = document.getElementById("breakout");
@@ -27,14 +36,39 @@
             setInterval(function (){
                         Visual();
                         Movimento();
-                        }, 30);
+                        }, 10);
             
-        }
+        }    
 
         function Movimento(){
 
+            BolaX = BolaX + velocidadeX;
+            BolaY = BolaY + velocidadeY;
 
+            //Limitando as paredes do canvas, Movimento de rebatimento!
+            if(BolaX >= canvas.width || BolaX <= 0){
+                velocidadeX = -velocidadeX;
+            }else if(BolaY < 0){
+                    velocidadeY = -velocidadeY;
+                }
+            
+            //Calcula se a bola acerto a Barra jogavel!!
+            //Os numeros ao lado das posições sao para correções do hitbox da barra.
+            // ---POSIÇÃO INICIAL --------POSIÇÃO FINAL ------------ ESPESSURA DA BARRA.
+            if( BolaX >= PosicaoX-3 && BolaX <= PosicaoX+LarguraBarra+3 && BolaY > PosicaoY-10){
+                velocidadeY = -velocidadeY;
+                //velocidadeX++;
+            }else{
+                ResetaBola();
+            }
 
+        }
+
+        function ResetaBola(){
+            if(BolaY > canvas.height){
+                BolaX = 450;
+                BolaY = 350;
+            }
         }
 
         function Visual(){
@@ -44,12 +78,12 @@
 
             //Cria a barra jogavel
             canvasContext.fillStyle = "white";
-            canvasContext.fillRect(canvas.width/2-LarguraBarra/2, canvas.height-AlturaBarra*2, LarguraBarra, AlturaBarra);
+            canvasContext.fillRect(PosicaoX, PosicaoY, LarguraBarra, AlturaBarra);
 
             //Criação da bola
             canvasContext.fillStyle = "red";
             canvasContext.beginPath();
-            canvasContext.arc(canvas.width/2, canvas.height-100, 7, 0, 2 * Math.PI, true);
+            canvasContext.arc(BolaX, BolaY, 7, 0, 2 * Math.PI, true);
             canvasContext.fill();//Preenche a bola
             
             BarrasInimigas();
