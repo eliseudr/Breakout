@@ -12,8 +12,13 @@
         const AlturaBarra = 10;
 
         //Barras inimigas
-        var BarrinhaAltura = 15;
-        var BarrinhaLargura =  40;
+        var brickRowCount = 4;
+        var brickColumnCount = 10;
+        var brickWidth = 75;
+        var brickHeight = 20;
+        var brickPadding = 10;
+        var brickOffsetTop = 30;
+        var brickOffsetLeft = 30;
 
         //Quantidade de pixels que sera movidos
         var velocidadeX = 7;
@@ -36,9 +41,18 @@
             setInterval(function (){
                         Visual();
                         Movimento();
+                        BarrasInimigas();
                         }, 10);
             
         }    
+
+        var bricks = [];
+        for(var c=0; c<brickColumnCount; c++) {
+            bricks[c] = [];
+            for(var r=0; r<brickRowCount; r++) {
+                bricks[c][r] = { x: 0, y: 0, status: 1 };
+            }
+        }
 
         function Movimento(){
 
@@ -62,6 +76,19 @@
                 ResetaBola();
             }
 
+            //CALCULAR SE ACERTO AS BARRAS INIMIGAS.
+            //------------------------------------------------------------------------------------------------------------------------
+            for(var c=0; c<brickColumnCount; c++) {
+                for(var r=0; r<brickRowCount; r++) {
+                    var b = bricks[c][r];
+                    if(b.status == 1) {
+                        if(BolaX > b.x && BolaX < b.x+brickWidth && BolaY > b.y && BolaY < b.y+brickHeight) {
+                            velocidadeY = -velocidadeY;
+                            b.status = 0;
+                        }
+                    }
+                }
+            }
         }
 
         function ResetaBola(){
@@ -71,8 +98,29 @@
             }
         }
 
+        function BarrasInimigas(){
+
+            for(var c=0; c<brickColumnCount; c++) {
+                for(var r=0; r<brickRowCount; r++) {
+                    if(bricks[c][r].status == 1) {
+                        var brickX = (c*(brickWidth+brickPadding))+brickOffsetLeft;
+                        var brickY = (r*(brickHeight+brickPadding))+brickOffsetTop;
+                        bricks[c][r].x = brickX;
+                        bricks[c][r].y = brickY;
+                        canvasContext.beginPath();
+                        canvasContext.rect(brickX, brickY, brickWidth, brickHeight);
+                        canvasContext.fillStyle = "#0095DD";
+                        canvasContext.fill();
+                        canvasContext.closePath();
+                    }
+                }
+            }
+        } 
+
         function Visual(){
             
+            
+
             canvasContext.fillStyle = "black";
             canvasContext.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -88,19 +136,8 @@
             
             BarrasInimigas();
 
+
         }
-
-        function BarrasInimigas(){
-
-            for(var x = 5; x < canvas.width ; x += 50){
-                for( var y = 10 ; y < 250 ; y += 20){
-                canvasContext.fillStyle = "pink";
-                canvasContext.fillRect(x, y, BarrinhaLargura, BarrinhaAltura); 
-                }
-            }
-        } 
-        
-       
 
     </script>
 
