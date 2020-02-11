@@ -32,17 +32,29 @@
         var PosicaoX = 360;
         var PosicaoY = 430;
 
+        //Score mais alto e Score atual
+        var MaiorScore = 0;
+        var Score = 0;
+
+        //Controle da barra jogavel
+        var pressEsquerda = false;
+        var pressDireita = false;
+
         //Para carregar o conteudo apenas apos carregar toda a pagina.
          window.onload = function(){
             
             canvas = document.getElementById("breakout");
             canvasContext = canvas.getContext("2d");
+            document.addEventListener("keydown", keyDownHandler, false);
+            document.addEventListener("keyup", keyUpHandler, false);
 
             setInterval(function (){
                         Visual();
                         Movimento();
                         BarrasInimigas();
-                        }, 10);
+                        keyDownHandler();
+                        keyUpHandler();
+                        }, 30);
             
         }    
 
@@ -51,6 +63,24 @@
             bricks[c] = [];
             for(var r=0; r<brickRowCount; r++) {
                 bricks[c][r] = { x: 0, y: 0, status: 1 };
+            }
+        }
+
+        function keyDownHandler(e) {
+            if(e.key == "Right" || e.key == "ArrowRight") {
+                pressDireita = true;
+            }
+            else if(e.key == "Left" || e.key == "ArrowLeft") {
+                pressEsquerda = true;
+            }
+        }
+
+        function keyUpHandler(e) {
+            if(e.key == "Right" || e.key == "ArrowRight") {
+                pressDireita = false;
+            }
+            else if(e.key == "Left" || e.key == "ArrowLeft") {
+                pressEsquerda = false;
             }
         }
 
@@ -76,7 +106,7 @@
                 ResetaBola();
             }
 
-            //CALCULAR SE ACERTO AS BARRAS INIMIGAS.
+            //CALCULAR SE ACERTOU AS BARRAS INIMIGAS.
             //------------------------------------------------------------------------------------------------------------------------
             for(var c=0; c<brickColumnCount; c++) {
                 for(var r=0; r<brickRowCount; r++) {
@@ -85,9 +115,21 @@
                         if(BolaX > b.x && BolaX < b.x+brickWidth && BolaY > b.y && BolaY < b.y+brickHeight) {
                             velocidadeY = -velocidadeY;
                             b.status = 0;
+                            Score++;//CALCULO DO MAIOR SCORE
+                            if (Score > MaiorScore){
+                                MaiorScore = Score;
+                            }
                         }
                     }
                 }
+            }
+
+            //MOVIMENTO DA BARRA CONTROLAVEL
+            if(pressDireita) {
+                PosicaoX += 7;
+            }
+            else if(pressEsquerda) {
+                PosicaoX -= 7;
             }
         }
 
@@ -95,6 +137,7 @@
             if(BolaY > canvas.height){
                 BolaX = 450;
                 BolaY = 350;
+                Score = 0;
             }
         }
 
@@ -109,7 +152,7 @@
                         bricks[c][r].y = brickY;
                         canvasContext.beginPath();
                         canvasContext.rect(brickX, brickY, brickWidth, brickHeight);
-                        canvasContext.fillStyle = "#0095DD";
+                        canvasContext.fillStyle = "pink";
                         canvasContext.fill();
                         canvasContext.closePath();
                     }
@@ -133,7 +176,14 @@
             canvasContext.beginPath();
             canvasContext.arc(BolaX, BolaY, 7, 0, 2 * Math.PI, true);
             canvasContext.fill();//Preenche a bola
+
+            canvasContext.fillStyle = 'White';
+            canvasContext.fillText('SCORE', 87, 10);
+            canvasContext.fillText(Score, 100, 20);
             
+            canvasContext.fillStyle = 'White';
+            canvasContext.fillText(' MAIOR SCORE ', 770, 10);
+            canvasContext.fillText(MaiorScore, 800, 20);
             BarrasInimigas();
 
 
