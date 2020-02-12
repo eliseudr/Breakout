@@ -8,7 +8,7 @@
         var canvasContext;
 
         //Barra Controlavel
-        const LarguraBarra = 180;
+        const LarguraBarra = 80;
         const AlturaBarra = 10;
 
         //Barras inimigas
@@ -21,8 +21,8 @@
         var brickOffsetLeft = 30;
 
         //Quantidade de pixels que sera movidos
-        var velocidadeX = 7;
-        var velocidadeY = 7;
+        var velocidadeX = 5;
+        var velocidadeY = 5;
 
         //Posições iniciais da bola
         var BolaX = 450;
@@ -54,7 +54,7 @@
                         BarrasInimigas();
                         keyDownHandler();
                         keyUpHandler();
-                        }, 30);
+                        }, 20);
             
         }    
 
@@ -92,16 +92,16 @@
             //Limitando as paredes do canvas, Movimento de rebatimento!
             if(BolaX >= canvas.width || BolaX <= 0){
                 velocidadeX = -velocidadeX;
-            }else if(BolaY < 0){
+            }else if(BolaY <= 0){
                     velocidadeY = -velocidadeY;
                 }
             
             //Calcula se a bola acerto a Barra jogavel!!
             //Os numeros ao lado das posições sao para correções do hitbox da barra.
             // ---POSIÇÃO INICIAL --------POSIÇÃO FINAL ------------ ESPESSURA DA BARRA.
-            if( BolaX >= PosicaoX-3 && BolaX <= PosicaoX+LarguraBarra+3 && BolaY > PosicaoY-10){
+            if( BolaX >= PosicaoX-10 && BolaX <= PosicaoX+LarguraBarra+10 && BolaY > PosicaoY-10 && BolaY < PosicaoY){
                 velocidadeY = -velocidadeY;
-                //velocidadeX++;
+                velocidadeX += 4;
             }else{
                 ResetaBola();
             }
@@ -126,10 +126,10 @@
 
             //MOVIMENTO DA BARRA CONTROLAVEL
             if(pressDireita) {
-                PosicaoX += 7;
+                PosicaoX += 12;
             }
             else if(pressEsquerda) {
-                PosicaoX -= 7;
+                PosicaoX -= 12;
             }
         }
 
