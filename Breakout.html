@@ -40,6 +40,9 @@
         var pressEsquerda = false;
         var pressDireita = false;
 
+        //VIDA DO PLAYER
+        var Vida = 3;
+
         //Para carregar o conteudo apenas apos carregar toda a pagina.
          window.onload = function(){
             
@@ -138,6 +141,7 @@
                 BolaX = 450;
                 BolaY = 350;
                 Score = 0;
+                Vida--;
             }
         }
 
@@ -159,6 +163,14 @@
                 }
             }
         } 
+
+        function VidaDoPlayer(){
+            if(Vida <= 0){
+                canvasContext.fillStyle = 'red';
+                canvasContext.fillText('VOCE PERDEU', 450, 250, 50);
+            }
+        }
+
 
         function Visual(){
             
@@ -184,8 +196,14 @@
             canvasContext.fillStyle = 'White';
             canvasContext.fillText(' MAIOR SCORE ', 770, 10);
             canvasContext.fillText(MaiorScore, 800, 20);
-            BarrasInimigas();
 
+            VidaDoPlayer(); 
+
+            canvasContext.fillStyle = 'Red';
+            canvasContext.fillText('VIDAS', 430, 10);
+            canvasContext.fillText(Vida, 435, 20);
+
+            BarrasInimigas();
 
         }
 
